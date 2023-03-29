@@ -21,7 +21,8 @@ class Asosiy_checking(BaseMiddleware):
         dastlabki_holati = True
         for k in kanallar:
             holat = await checking(user_id=user_id,kanal_link=k)
-            dastlabki_holati *= holat
+            dastlabki_holati \
+                *= holat
 
             kanal = await bot.get_chat(k)
 
@@ -31,7 +32,7 @@ class Asosiy_checking(BaseMiddleware):
                 royxat.append(button)
         royxat.append([InlineKeyboardButton(text="Tekshirish",callback_data='www')])
         if not dastlabki_holati:
-            await bot.send_message(chat_id=user_id,text=matn,disable_web_page_preview=True,
+            await bot.send_message(chat_id=xabar.message.chat.id,text=matn,disable_web_page_preview=True,
                                    reply_markup=InlineKeyboardMarkup(inline_keyboard=royxat))
             raise CancelHandler()
 

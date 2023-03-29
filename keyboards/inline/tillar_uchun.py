@@ -9,6 +9,7 @@ till_button= InlineKeyboardMarkup(
             InlineKeyboardButton(text="hamkorlarimiz",url="https://t.me/Rasmlar_moshinalar"),
             InlineKeyboardButton(text="ulashish",switch_inline_query="dobry bot")
         ]
-
-    ]
+        ]
 )
+
+

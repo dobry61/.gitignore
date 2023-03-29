@@ -18,8 +18,11 @@ menu_button = ReplyKeyboardMarkup(
 
         [
           KeyboardButton(text="lokatsiya",request_location=True),
-          KeyboardButton(text="Adminga murojaat")
-        ]
+            KeyboardButton(text="ingliz tili")
+        ],
+
+
+
     ],
     resize_keyboard=True
 )
@@ -27,8 +30,12 @@ tasdiqlash_buttons = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="tasdiqlash"),
-            KeyboardButton(text="bekor qilish")
-        ]
+            KeyboardButton(text="bekor qilish"),
+        ],
+
+
+
+
     ],
     resize_keyboard=True
 )

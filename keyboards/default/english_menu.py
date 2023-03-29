@@ -16,8 +16,10 @@ english_menu = ReplyKeyboardMarkup(
 
         ],
         [
-          KeyboardButton("location",request_location=True)
-        ]
+          KeyboardButton("location",request_location=True),
+          KeyboardButton(text="Uzbek langulange")
+        ],
+
     ],
     resize_keyboard=True
 )

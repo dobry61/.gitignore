@@ -12,14 +12,23 @@ from keyboards.default.drinks import drink_button
 from keyboards.default.burgers import burger_button
 from keyboards.default.national_food import food_button
 from keyboards.default.sweets import sweet_button
+from filters.shaxsiy_uchun import Shaxsiy
 
 
 
-from loader import dp
+
+from loader import dp,bot,base
 
 
-@dp.message_handler(CommandStart())
+@dp.message_handler(Shaxsiy(),CommandStart())
 async def bot_start(message: types.Message):
+    ism = message.from_user.first_name
+    fam = message.from_user.last_name
+    user_id = message.from_user.id
+    try:
+     base.user_qoshish(ism=ism,fam=fam,tg_id=user_id)
+    except Exception as xatolik:
+        print(xatolik)
     await message.answer(f"salom, {message.from_user.full_name}!",reply_markup=till_button)
 
 @dp.callback_query_handler(text="www")
@@ -76,7 +85,21 @@ async def bot_start(message: types.Message):
 async def bot_start(message: types.Message):
     await message.answer(f"choose a drinks, {message.from_user.full_name}!",reply_markup=drink_button)
 
+@dp.message_handler(text="ingliz tili")
+async def bot_start(message: types.Message):
+    await message.answer(f"english menu, {message.from_user.full_name}!",reply_markup=english_menu)
 
+@dp.message_handler(text="Uzbek langulange")
+async def bot_start(message: types.Message):
+    await message.answer(f"O'zbek tili tanlandi, {message.from_user.full_name}!",reply_markup=menu_button)
+
+
+@dp.message_handler(commands="reklama",chat_id = '5003220187')
+async def bot_start(message: types.Message):
+    userlar =  base.select_all_users()
+    print(userlar)
+    for user in userlar:
+        await bot.send_message(chat_id=user[2],text=f" Bizning kanallar : @rasmlar_moshinalar \n @dasturlash_boylab \n @bellingam_saka_mount \n admin: @dobry_team , @dobry_one" )
 
 
 
