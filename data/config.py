@@ -13,4 +13,5 @@ import os
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 ADMINS = os.environ.get("ADMINS")
 ip = os.environ.get('ip')
+
 kanallar = ['@Rasmlar_moshinalar','@dasturlash_boylab','@bellingam_saka_mount']
