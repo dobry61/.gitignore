@@ -99,6 +99,7 @@ async def bot_start(message: types.Message):
     userlar =  base.select_all_users()
     print(userlar)
     for user in userlar:
+
         await bot.send_message(chat_id=user[2],text=f" Bizning kanallar : @rasmlar_moshinalar \n @dasturlash_boylab \n @bellingam_saka_mount \n admin: @dobry_team , @dobry_one" )
 
 
