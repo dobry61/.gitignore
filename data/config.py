@@ -10,7 +10,7 @@
 # IP = env.str("ip")  # Xosting ip manzili
 
 import os
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
+BOT_TOKEN = str(os.environ.get("BOT_TOKEN"))
 ADMINS = os.environ.get("ADMINS")
 ip = os.environ.get('ip')
 

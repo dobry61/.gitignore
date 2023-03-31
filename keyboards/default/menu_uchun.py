@@ -20,6 +20,9 @@ menu_button = ReplyKeyboardMarkup(
           KeyboardButton(text="lokatsiya",request_location=True),
             KeyboardButton(text="ingliz tili")
         ],
+        [
+            KeyboardButton(text="Adminga murojaat")
+        ]
 
 
 
