@@ -60,7 +60,7 @@ class Database:
      def user_qoshish(self,tg_id:int,fam:str=None,ism:str=None ):
 
         sql = """
-        INSERT INTO users(fam,tg_id,ism) VALUES(?, ?, ?)
+        INSERT INTO myfiles_subscribe(fam,tg_id,ism) VALUES(?, ?, ?)
            """
         return self.execute(sql, parameters=(fam,ism,tg_id), commit=True)
 

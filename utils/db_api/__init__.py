@@ -1,1 +1,1 @@
-from . import BAZA_BILAN_ISHLASH
+from . import baza_bilan_ishlash
