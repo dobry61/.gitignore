@@ -1,44 +1,18 @@
 from aiogram.types import ReplyKeyboardMarkup,KeyboardButton
+from loader import  base
 
-menu_button = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="milliy taomlar"),
-            KeyboardButton(text="Ichimliklar")
-        ],
-        [
-            KeyboardButton(text="fast food"),
-            KeyboardButton(text="Shirinliklar")
-        ],
-        [
-          KeyboardButton(text="chiqish"),
-          KeyboardButton(text="kontakt",request_contact=True)
+menular = base.select_all_menu()
+index = 0
+i = 0
+royxat = []
 
-        ],
+for menu in menular:
+    if i % 2 == 0 and i != 0:
+        index += 1
+    if i % 2 == 0:
+        royxat.append([KeyboardButton(text=menu[1])])
+    else:
+        royxat[index].append((KeyboardButton(text=menu[1])))
+    i += 1
 
-        [
-          KeyboardButton(text="lokatsiya",request_location=True),
-            KeyboardButton(text="ingliz tili")
-        ],
-        [
-            KeyboardButton(text="Adminga murojaat")
-        ]
-
-
-
-    ],
-    resize_keyboard=True
-)
-tasdiqlash_buttons = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="tasdiqlash"),
-            KeyboardButton(text="bekor qilish"),
-        ],
-
-
-
-
-    ],
-    resize_keyboard=True
-)
+menu_button = ReplyKeyboardMarkup(keyboard=royxat,resize_keyboard=True)

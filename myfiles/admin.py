@@ -1,8 +1,18 @@
 from django.contrib import admin
 from myfiles.models import *
 # Register your models here.
+class AdminSubscribe(admin.ModelAdmin):
+    list_display = ['id','ism','fam','username','tg_id']
+admin.site.register(Subscribe,AdminSubscribe)
 
-class AdminSub(admin.ModelAdmin):
-    list_display = ['id','ism','username','familya','tg_id']
+class AdminMenu(admin.ModelAdmin):
+    list_display = ['id','nomi']
+admin.site.register(Menu,AdminMenu)
 
-admin.site.register(Subscribe,AdminSub)
+class AdminMaxsulotlar(admin.ModelAdmin):
+    list_display = ['id','nomi','narxi','rasm','malumot','turi']
+admin.site.register(Maxsulotlar,AdminMaxsulotlar)
+
+class AdminKorzinka(admin.ModelAdmin):
+    list_display = ['id','nomi','narxi','rasm','malumot','turi','soni','username']
+admin.site.register(Korzinka,AdminKorzinka)

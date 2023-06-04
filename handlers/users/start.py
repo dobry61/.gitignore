@@ -1,107 +1,207 @@
+import datetime
+
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
+from aiogram.types import CallbackQuery, KeyboardButton, ReplyKeyboardMarkup,InlineKeyboardButton,InlineKeyboardMarkup
+
 from keyboards.default.menu_uchun import menu_button
-from keyboards.default.fast_food import fast_button
-from keyboards.default.Ichimliklar import ichimlik_button
-from keyboards.default.milliy_taom import taom_button
-from keyboards.default.shirinlik_uchun import shirinlik_button
+# from keyboards.default.taomlar_uchun import taomlar_buttun
+# from keyboards.default.ichimliklar_uchun import ichimliklar_buttun
+# from keyboards.default.alkagollar_uchun import alkagollar_buttun
+# from keyboards.default.salqin_ichimliklar_uchun import salqin_ichimliklar_buttun
+# from keyboards.default.taomlar2_uchun import taomlar2_buttun
+# from keyboards.default.taomlar1_uchun import taomlar1_buttun
+
 from keyboards.inline.tillar_uchun import till_button
-from aiogram.types import  CallbackQuery
-from keyboards.default.english_menu import english_menu
-from keyboards.default.drinks import drink_button
-from keyboards.default.burgers import burger_button
-from keyboards.default.national_food import food_button
-from keyboards.default.sweets import sweet_button
-from filters.shaxsiy_uchun import Shaxsiy
+
+# #english
+# from keyboards.default.menu_en import menu_buttun_en
+# from keyboards.default.foods import foods_uchun
+# from keyboards.default.foods1 import foods1_buttun
+# from keyboards.default.foods2 import foods2_buttun
+# from keyboards.default.drinks import drinkss_buttun
+# from keyboards.default.cool_ichimliklar import sovuq_ichimliklar_buttun
+# from keyboards.default.alcahol import alcahols_buttun
+
+from loader import dp, base, bot
 
 
-
-
-from loader import dp,bot,base
-
-
-@dp.message_handler(Shaxsiy(),CommandStart())
+#Menu
+# azolarni qabul qilish
+@dp.message_handler(CommandStart())
 async def bot_start(message: types.Message):
     ism = message.from_user.first_name
     fam = message.from_user.last_name
     user_id = message.from_user.id
     try:
-     base.user_qoshish(ism=ism,fam=fam,tg_id=user_id)
-    except Exception as xatolik:
-        print(xatolik)
-    await message.answer(f"salom, {message.from_user.full_name}!",reply_markup=till_button)
+        base.user_qoshish(ism=ism,fam=fam,username=message.from_user.username,tg_id=user_id)
+    except Exception:
+        pass
+    await message.answer(f"Salom, Tillarni tanlang  {message.from_user.full_name}!",reply_markup=till_button)
 
-@dp.callback_query_handler(text="www")
-async def bot_start( xabar : CallbackQuery):
-    await xabar.message.answer(f"bot qayta ishga tushdi",reply_markup=till_button)
-
-
+# tillar uchun
 @dp.callback_query_handler(text="til1")
-async def bot_start(xabar : CallbackQuery):
-    await xabar.message.answer(f"O'zbek tili tanlandi",reply_markup=menu_button)
+async def bot_start(xabar: CallbackQuery):
+    await xabar.message.answer(f"Taomlarni tanlang ",reply_markup=menu_button)
 
 
-@dp.message_handler(text="milliy taomlar")
+
+
+#Taomlar bo'limi buttonlar
+menular = base.select_all_menu()
+@dp.message_handler(text=[menu[1] for menu in menular])
 async def bot_start(message: types.Message):
-    await message.answer(f"Taomlarni tanlang, {message.from_user.first_name}!",reply_markup=taom_button)
+    typee =message.text
+    maxsulotlar = base.select_maxsulotlar(turi=typee)
 
-@dp.message_handler(text="fast food")
+    index = 0
+    i = 0
+    royxat = []
+    for menu in maxsulotlar:
+        if i % 2 == 0 and i != 0:
+            index += 1
+        if i % 2 == 0:
+            royxat.append([KeyboardButton(text=menu[1])])
+        else:
+            royxat[index].append(KeyboardButton(text=menu[1]))
+        i += 1
+
+    royxat.append([KeyboardButton(text="Orqaga")])
+    maxsulotlar_buttun = ReplyKeyboardMarkup(keyboard=royxat, resize_keyboard=True)
+
+    await message.answer(f"Maxsulotlarni tanlang, {message.from_user.full_name}!",reply_markup=maxsulotlar_buttun)
+
+#maxsulotlar
+menular = base.select_all_maxsulotlar()
+@dp.message_handler(text=[menu[1] for menu in menular])
 async def bot_start(message: types.Message):
-    await message.answer(f"fast food tanlang, {message.from_user.full_name}!",reply_markup=fast_button)
+    typee = message.text
+    maxsulot = base.select_maxsulotlar(nomi=typee)[0]
+    print(maxsulot,'++++++++++++++++++++++')
+    #print(maxsulot)
+    #(1, 'Osh', 20000, 'https://t.me/meningkanalim1898/2', None, 'Taomlar')
+    max_id = maxsulot[0]
+    max_nomi = maxsulot[1]
+    max_narxi = maxsulot[5]
+    max_rasmi = maxsulot[2]
+    user_id = message.from_user.id
+    await bot.send_photo(chat_id=user_id,photo=max_rasmi,caption=f"Nomi :{max_nomi}\n"
+                                                                 f"Narxi : {max_narxi}",
+                         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                             [
+                             InlineKeyboardButton(text="Sotib olish",callback_data=f"buy {max_id}")
+                             ]
+                         ]
+                         )
 
-@dp.message_handler(text="Ichimliklar")
+                         )
+
+#orqaga
+@dp.message_handler(text="Orqaga")
 async def bot_start(message: types.Message):
-    await message.answer(f"ichimlik tanlang, {message.from_user.full_name}!", reply_markup=ichimlik_button)
-
-@dp.message_handler(text="Shirinliklar")
-async def bot_start(message: types.Message):
-    await message.answer(f"shirinlik tanlang, {message.from_user.full_name}!", reply_markup=shirinlik_button)
-
-@dp.message_handler(text="chiqish")
-async def bot_start(message: types.Message):
-    await message.answer(f"ortga, {message.from_user.full_name}!",reply_markup=menu_button)
-
-@dp.callback_query_handler(text="til2")
-async def bot_start(xabar : CallbackQuery):
-    await xabar.message.answer(f"ingliz tili tanlandi",reply_markup=english_menu)
-
-@dp.message_handler(text="back")
-async def bot_start(message: types.Message):
-    await message.answer(f"back, {message.from_user.full_name}!",reply_markup=english_menu)
-
-@dp.message_handler(text="national food")
-async def bot_start(message: types.Message):
-    await message.answer(f"choose a national dish, {message.from_user.full_name}!",reply_markup=food_button)
-
-@dp.message_handler(text="burgers")
-async def bot_start(message: types.Message):
-    await message.answer(f"choose a burgers, {message.from_user.full_name}!",reply_markup=burger_button)
-
-@dp.message_handler(text="sweets")
-async def bot_start(message: types.Message):
-    await message.answer(f"choose a sweets, {message.from_user.full_name}!",reply_markup=sweet_button)
-
-@dp.message_handler(text="drinks")
-async def bot_start(message: types.Message):
-    await message.answer(f"choose a drinks, {message.from_user.full_name}!",reply_markup=drink_button)
-
-@dp.message_handler(text="ingliz tili")
-async def bot_start(message: types.Message):
-    await message.answer(f"english menu, {message.from_user.full_name}!",reply_markup=english_menu)
-
-@dp.message_handler(text="Uzbek langulange")
-async def bot_start(message: types.Message):
-    await message.answer(f"O'zbek tili tanlandi, {message.from_user.full_name}!",reply_markup=menu_button)
+    await message.answer(f"Taomlarni  tanlang, {message.from_user.full_name}!", reply_markup=menu_button)
 
 
-@dp.message_handler(commands="reklama",chat_id = '5003220187')
-async def bot_start(message: types.Message):
-    userlar =  base.select_all_users()
-    print(userlar)
-    for user in userlar:
+@dp.callback_query_handler()
+async def bot_start(xabar: CallbackQuery):
+    data = xabar.data.split()
+    if data[0] == 'buy':
+        maxsulot_id = data[1]
+        maxsulot=base.select_maxsulot(id=maxsulot_id)
 
-        await bot.send_message(chat_id=user[2],text=f" Bizning kanallar : @rasmlar_moshinalar \n @dasturlash_boylab \n @bellingam_saka_mount \n admin: @dobry_team , @dobry_one" )
+        max_nomi = maxsulot[1]
+        max_narxi = maxsulot[5]
+        max_rasmi = maxsulot[2]
+        max_malumot = maxsulot[3]
+        max_turi = maxsulot[4]
+        max_soni = 1
+        user_id = xabar.from_user.id
+        user_name=xabar.from_user.username
+        date = datetime.datetime.now()
+        base.maxsulot_qoshish_to_korzinka(nomi=max_nomi,tg_id=user_id,narxi=max_narxi,rasm=max_rasmi,turi=max_turi,soni=max_soni,malumot=max_malumot,username=user_name,date=date,status=True)
 
 
+        await xabar.message.answer(f"Maxsulot Korzinkaga joylandi ! ")
 
 
+# @dp.message_handler(text="1 - Taomlar")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Birinchi taomni tanlang, {message.from_user.full_name}!", reply_markup=taomlar1_buttun)
+#
+# @dp.message_handler(text="2 - Taomlar")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Ikkinchi taomni tanlang, {message.from_user.full_name}!", reply_markup=taomlar2_buttun)
+#
+#
+#
+#
+# #Ichimliklar bo'limi
+# @dp.message_handler(text="Ichimliklar")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Ichimliklarni tanlang, {message.from_user.full_name}!", reply_markup=ichimliklar_buttun)
+#
+#
+#
+# @dp.message_handler(text="Salqin ichimliklar")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Salqin ichimliklarni tanlang, {message.from_user.full_name}!", reply_markup=salqin_ichimliklar_buttun)
+#
+# @dp.message_handler(text="Alkagollar")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Alkagollarni tanlang, {message.from_user.full_name}!", reply_markup=tillar_buttun)
+#
+#
+# @dp.message_handler(text="Orqaga")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Taomlarni  tanlang, {message.from_user.full_name}!", reply_markup=menu_buttun)
+#
+# # English
+#
+# @dp.callback_query_handler(text="til2")
+# async def bot_start(xabar: CallbackQuery):
+#     await xabar.message.answer(f" Choose foods ",reply_markup=menu_buttun_en)
+#
+# @dp.message_handler(text="Foods")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Choose foods, {message.from_user.full_name}!",reply_markup=foods_uchun)
+#
+# @dp.message_handler(text="1 - Food")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Choose the first dish, {message.from_user.full_name}!", reply_markup=foods1_buttun)
+#
+# @dp.message_handler(text="2 - Food")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Choose the first dish, {message.from_user.full_name}!", reply_markup=foods2_buttun)
+#
+#
+# # Drinks
+#
+# @dp.message_handler(text="Drinks")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Choose drinks , {message.from_user.full_name}!", reply_markup=drinkss_buttun)
+#
+# @dp.message_handler(text="Cool drinks")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Cool drinks choose , {message.from_user.full_name}!", reply_markup=sovuq_ichimliklar_buttun)
+#
+#
+# @dp.message_handler(text="Alcohols")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Alcohols choose, {message.from_user.full_name}!", reply_markup=tillar_buttun)
+#
+#
+# @dp.message_handler(text="Back")
+# async def bot_start(message: types.Message):
+#     await message.answer(f"Choose foods, {message.from_user.full_name}!", reply_markup=menu_buttun_en)
+#
+#
+# @dp.callback_query_handler(text="www")
+# async def bot_start(xabar:CallbackQuery):
+#     await xabar.message.answer(f"Qayta ishga tushirish",reply_markup=menu_buttun)
+#
+# #reklama jo'natish
+# @dp.message_handler(commands="reklama",chat_id= '1961871634')
+# async def bot_start(message: types.Message):
+#     userlar= base.select_all_users()
+#     for user in userlar:
+#          await bot.send_message(chat_id=user[4],text=f"Assalomu alaykum bu reklama, {message.from_user.full_name}!")
