@@ -14,5 +14,5 @@ for menu in menular:
     else:
         royxat[index].append((KeyboardButton(text=menu[1])))
     i += 1
-
+royxat.append([ KeyboardButton(text="Korzinka")])
 menu_button = ReplyKeyboardMarkup(keyboard=royxat,resize_keyboard=True)

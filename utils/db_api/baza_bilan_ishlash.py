@@ -82,7 +82,6 @@ class Database:
         return self.execute(sql,fetchall=True)
 
 
-
     def select_maxsulotlar(self,**kwargs):
         # SQL_EXAMPLE = "SELECT * FROM user where id = 1 AND Name='John'"
         sql = """
@@ -91,6 +90,17 @@ class Database:
         sql,parameters = self.format_args(sql, kwargs)
 
         return self.execute(sql, parameters=parameters, fetchall=True)
+
+
+    def select_maxsulotlar_from_korzinka(self,**kwargs):
+        # SQL_EXAMPLE = "SELECT * FROM user where id = 1 AND Name='John'"
+        sql = """
+                SELECT * FROM myfiles_korzinka Where 
+                """
+        sql,parameters = self.format_args(sql, kwargs)
+
+        return self.execute(sql, parameters=parameters, fetchall=True)
+
 
     def select_all_maxsulotlar(self):
         sql = """
@@ -124,6 +134,17 @@ class Database:
         sql,parameters =self.format_args(sql,kwargs)
 
         return self.execute(sql,parameters=parameters,fetchone=True)
+
+    def select_maxsulot_to_korzinka(self,**kwargs):
+
+        #SQL_EXAMPLE = "SELECT * FROM user where id = 1 AND Name='John'"
+        sql = """
+        SELECT * FROM myfiles_korzinka Where 
+        """
+        sql,parameters =self.format_args(sql,kwargs)
+
+        return self.execute(sql,parameters=parameters,fetchone=True)
+
 
 
 def logger(statement):
